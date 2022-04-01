@@ -19,4 +19,20 @@ def info(id):
         result=[BooksRecordsItem for BooksRecordsItem in BooksRecords if BooksRecordsItem['ID'] == idInt]
         if len(result)==0:
             return  "No such Book Found!!"
-        return jsonify([{"Numbers OF books":result[0]['NUMBERS'],"Cost":result[0]['COST']}])
+        return jsonify([{"ID":result[0]['ID'],"Title":result[0]['NAME']}])
+
+@app.route("/search/<topic>",methods=['GET'])
+def search(topic):
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
+        data = DBfile.read()
+        jsonObject = json.loads(data)
+        BooksRecords = jsonObject['BOOK']
+        result=[BooksRecordsItem for BooksRecordsItem in BooksRecords if BooksRecordsItem['TOPIC'] == topic]
+        arr=[]
+        i=0
+        for x in result:
+            arr.append({"ID":result[i]["ID"],"NAME":result[i]['NAME']})
+            i=i+1
+        if len(result)==0:
+            return  "No Such Book That Have The Same Topic Found!!"
+        return jsonify([arr])
