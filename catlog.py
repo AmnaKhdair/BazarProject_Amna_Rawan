@@ -12,4 +12,4 @@ def home():
 @app.route("/info/<id>",methods['GET'])
 def Info():
     
-    return "hello world"
+    return "hello world test"
