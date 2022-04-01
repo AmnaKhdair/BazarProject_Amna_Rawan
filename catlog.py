@@ -19,7 +19,7 @@ def info(id):
         result=[BooksRecordsItem for BooksRecordsItem in BooksRecords if BooksRecordsItem['ID'] == idInt]
         if len(result)==0:
             return  "No such Book Found!!"
-        return jsonify([{"ID":result[0]['ID'],"Title":result[0]['NAME']}])
+        return jsonify([{"NUMBERS":result[0]['NUMBERS'],"Title":result[0]['NAME'],"COST":result[0]['COST']}])
 
 @app.route("/search/<topic>",methods=['GET'])
 def search(topic):
