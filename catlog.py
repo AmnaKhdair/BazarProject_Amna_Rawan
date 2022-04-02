@@ -73,5 +73,22 @@ def queryNumbers():
             return "success"
           else :return "out of stock"
       else: return "NO such book that have same id"
-       
+
+@app.route("/IncreaseNumbers/<id>",methods=['PUT'])
+def IncreaseNumbers():
+    bodyData=request.data
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
+        data = DBfile.read()
+        jsonObject = json.loads(data)
+        BooksRecords = jsonObject['BOOK']
+    DBfile.close() 
+    idInt = int(bodyData['ID'])
+    for items in BooksRecords:
+      if items["ID"] == idInt:
+            items["NUMBERS"]=items["NUMBERS"]+1
+            newJson=({"BOOK": BooksRecords})
+            with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
+             json.dump(newJson, DBfileWrite,indent=3)
+            return "success"
+      else: return "NO such book that have same id"
        
