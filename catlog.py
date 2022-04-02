@@ -74,7 +74,7 @@ def queryNumbers():
           else :return "out of stock"
       else: return "NO such book that have same id"
 
-@app.route("/IncreaseNumbers/<id>",methods=['PUT'])
+@app.route("/IncreaseNumbers",methods=['PUT'])
 def IncreaseNumbers():
     bodyData=request.data
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
@@ -83,9 +83,10 @@ def IncreaseNumbers():
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
     idInt = int(bodyData['ID'])
+    amountInt = int(bodyData['AMOUNTS'])
     for items in BooksRecords:
       if items["ID"] == idInt:
-            items["NUMBERS"]=items["NUMBERS"]+1
+            items["NUMBERS"]=items["NUMBERS"]+amountInt 
             newJson=({"BOOK": BooksRecords})
             with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
