@@ -37,17 +37,18 @@ def search(topic):
             return  "No Such Book That Have The Same Topic Found!!"
         return jsonify([arr])
 
-@app.route("/updateCost/<id>/<cost>",methods=['GET'])
-def updateCost(id,cost):
+@app.route("/updateCost",methods=['PUT'])
+def updateCost():
+    bodyData=request.data
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
-    idInt = int(id)
+    idInt = int(bodyData['ID'])
     for items in BooksRecords:
       if items["ID"] == idInt:
-        items["COST"]=int(cost)   
+        items["COST"]=int(bodyData['COST'])   
         newJson=({"BOOK": BooksRecords})
         with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
          json.dump(newJson, DBfileWrite,indent=3)
