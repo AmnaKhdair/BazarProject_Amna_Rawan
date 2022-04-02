@@ -63,10 +63,11 @@ def queryNumbers():
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
     idInt = int(bodyData['ID'])
+    amountInt = int(bodyData['AMOUNTS'])
     for items in BooksRecords:
       if items["ID"] == idInt:
           if items["NUMBERS"]!=0:
-            items["NUMBERS"]=items["NUMBERS"]-1
+            items["NUMBERS"]=items["NUMBERS"]-amountInt
             newJson=({"BOOK": BooksRecords})
             with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
