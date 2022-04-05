@@ -55,7 +55,7 @@ def updateCost():
         return "success"
 
 @app.route("/queryNumbers",methods=['PUT'])
-def queryNumbers():
+def queryNumbers(id,amount):
     bodyData=request.data
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
@@ -71,7 +71,7 @@ def queryNumbers():
             newJson=({"BOOK": BooksRecords})
             with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
-            return "success"
+            return "success!the name of book you buied is {}".format(items["NAME"])
           else :return "out of stock"
       else: return "NO such book that have same id"
 
