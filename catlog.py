@@ -19,7 +19,7 @@ def info(id):
         result=[BooksRecordsItem for BooksRecordsItem in BooksRecords if BooksRecordsItem['ID'] == idInt]
         if len(result)==0:
             return  "No such Book Found!!"
-        return jsonify([{"NUMBERS":result[0]['NUMBERS'],"Title":result[0]['NAME'],"COST":result[0]['COST']}])
+        return jsonify({"info":[{"NUMBERS":result[0]['NUMBERS'],"Title":result[0]['NAME'],"COST":result[0]['COST']}]})
 
 @app.route("/search/<topic>",methods=['GET'])
 def search(topic):
@@ -37,60 +37,59 @@ def search(topic):
             return  "No Such Book That Have The Same Topic Found!!"
         return jsonify([arr])
 
-@app.route("/updateCost",methods=['PUT'])
-def updateCost():
+@app.route("/updateCost/<id>",methods=['PUT'])
+def updateCost(id):
     bodyData=request.data
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
-    idInt = int(bodyData['ID'])
+    idInt = int(id)
     for items in BooksRecords:
       if items["ID"] == idInt:
-        items["COST"]=int(bodyData['COST'])   
+        items["COST"]=int(request.form.get('COST'))   
         newJson=({"BOOK": BooksRecords})
         with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
          json.dump(newJson, DBfileWrite,indent=3)
         return "success"
 
-@app.route("/queryNumbers",methods=['PUT'])
-def queryNumbers(id,amount):
+@app.route("/queryNumbers/<id>",methods=['PUT'])
+def queryNumbers(id):
     bodyData=request.data
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
-    idInt = int(bodyData['ID'])
-    amountInt = int(bodyData['AMOUNTS'])
+    idInt = int(id)
+    amountInt = int(request.form.get('AMOUNTS'))
     for items in BooksRecords:
       if items["ID"] == idInt:
-          if items["NUMBERS"]!=0:
             items["NUMBERS"]=items["NUMBERS"]-amountInt
             newJson=({"BOOK": BooksRecords})
             with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
-            return "success!the name of book you buied is {}".format(items["NAME"])
-          else :return "out of stock"
+            return "success!the name of book you buied is [{}".format(items["NAME"]+"]")
       else: return "NO such book that have same id"
 
-@app.route("/IncreaseNumbers",methods=['PUT'])
-def IncreaseNumbers():
-    bodyData=request.data
+@app.route("/IncreaseNumbers/<id>",methods=['PUT'])
+def IncreaseNumbers(id):
     with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
     DBfile.close() 
-    idInt = int(bodyData['ID'])
-    amountInt = int(bodyData['AMOUNTS'])
+    idInt = int(id)
+    amountInt = int(request.form.get('AMOUNTS'))
     for items in BooksRecords:
       if items["ID"] == idInt:
             items["NUMBERS"]=items["NUMBERS"]+amountInt 
             newJson=({"BOOK": BooksRecords})
             with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
-            return "success"
+            return jsonify("success")
       else: return "NO such book that have same id"
-       
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
