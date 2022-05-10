@@ -1,8 +1,6 @@
 from crypt import methods
 from flask import Flask, request, jsonify
 import json
-import json
-
 
 app = Flask(__name__)
 
@@ -12,7 +10,7 @@ def home():
 
 @app.route("/info/<id>",methods=['GET'])
 def info(id):
-    with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'r') as DBfile:
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
@@ -24,7 +22,7 @@ def info(id):
 
 @app.route("/search/<topic>",methods=['GET'])
 def search(topic):
-    with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'r') as DBfile:
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
@@ -41,7 +39,7 @@ def search(topic):
 @app.route("/updateCost/<id>",methods=['PUT'])
 def updateCost(id):
     bodyData=request.data
-    with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'r') as DBfile:
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
@@ -51,14 +49,14 @@ def updateCost(id):
       if items["ID"] == idInt:
         items["COST"]=int(request.form.get('COST'))   
         newJson=({"BOOK": BooksRecords})
-        with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'w') as DBfileWrite:
+        with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
          json.dump(newJson, DBfileWrite,indent=3)
         return "success"
 
 @app.route("/queryNumbers/<id>",methods=['PUT'])
 def queryNumbers(id):
     bodyData=request.data
-    with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'r') as DBfile:
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
@@ -69,14 +67,14 @@ def queryNumbers(id):
       if items["ID"] == idInt:
             items["NUMBERS"]=items["NUMBERS"]-amountInt
             newJson=({"BOOK": BooksRecords})
-            with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'w') as DBfileWrite:    
+            with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
             return "success!the name of book you buied is [{}".format(items["NAME"]+"]")
     else: return "NO such book that have same id"
 
 @app.route("/IncreaseNumbers/<id>",methods=['PUT'])
 def IncreaseNumbers(id):
-    with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'r') as DBfile:
+    with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'r') as DBfile:
         data = DBfile.read()
         jsonObject = json.loads(data)
         BooksRecords = jsonObject['BOOK']
@@ -87,10 +85,10 @@ def IncreaseNumbers(id):
       if items["ID"] == idInt:
             items["NUMBERS"]=items["NUMBERS"]+amountInt 
             newJson=({"BOOK": BooksRecords})
-            with open('/home/amnakhdair/Desktop/projects/BookDB2.json', 'w') as DBfileWrite:
+            with open('/home/amnakhdair/Desktop/projects/BooksDB.json', 'w') as DBfileWrite:
              json.dump(newJson, DBfileWrite,indent=3)
             return jsonify("success")
       else: return "NO such book that have same id"
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=6002)
+    app.run(debug=True, host='0.0.0.0', port=6001)
